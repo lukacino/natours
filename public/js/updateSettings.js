@@ -4,8 +4,8 @@ const updateSettings = async (data, type) => {
   try {
     const url =
       type === 'Password'
-        ? 'http://127.0.0.1:3000/api/v1/users/updateMyPassword'
-        : 'http://127.0.0.1:3000/api/v1/users/updateMe';
+        ? '/api/v1/users/updateMyPassword'
+        : '/api/v1/users/updateMe';
 
     const res = await axios({
       method: 'PATCH',
@@ -30,7 +30,6 @@ if (userDataForm) {
     form.append('name', document.getElementById('name').value);
     form.append('email', document.getElementById('email').value);
     form.append('photo', document.getElementById('photo').files[0]);
-    console.log(form);
 
     await updateSettings(form, 'Data');
   });
