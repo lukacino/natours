@@ -27,6 +27,21 @@ exports.getTour = catchAsync(async (req, res, next) => {
     return next(new AppError('There is no tour with that name.', 404));
   }
 
+  if (req.user) {
+    const bookings = await Booking.find({ user: req.user.id });
+    const tourIDs = bookings.map((el) => el.tour);
+    const userBookedTour = await Tour.find({ _id: { $in: tourIDs } });
+    // console.log(userBookedTour);
+
+    if (userBookedTour) {
+      userBookedTour.forEach((t) => {
+        if (t.id === tour.id) {
+          res.locals.alreadyBooked = true;
+        }
+      });
+    }
+  }
+
   // 2) Build template
   // 3) Render template using data from 1)
   res.status(200).render('tour', {
